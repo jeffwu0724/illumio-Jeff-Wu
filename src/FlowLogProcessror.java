@@ -23,9 +23,9 @@ public class FlowLogProcessror {
                 // if the lookupTableFile format is wrong, we will skip
                 if (lookupTableLine.length < 3) continue;
 
-                String dstPort = lookupTableLine[0];
-                String protocol = lookupTableLine[1];
-                String tag = lookupTableLine[2];
+                String dstPort = lookupTableLine[0].trim();
+                String protocol = lookupTableLine[1].toLowerCase().trim();
+                String tag = lookupTableLine[2].toLowerCase().trim();
 
                 //we will base on the lookpu table, and create a map with PortProtocolPair + tag
                 PortProtocolPair curPortProtocolPair = new PortProtocolPair(dstPort, protocol);
