@@ -14,6 +14,21 @@ public class PortProtocolPair {
         return this._port + "," + this._protocol;
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+
+        PortProtocolPair _portProtocolPair = (PortProtocolPair) object;
+        return Objects.equals(_port, _portProtocolPair._port) && Objects.equals(_protocol, _portProtocolPair._protocol);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(_port, _protocol);
+    }
+
     public String getPort() {
         return _port;
     }
