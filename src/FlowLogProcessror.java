@@ -70,7 +70,7 @@ public class FlowLogProcessror {
     }
 
     public void generateTagCountOutputReport() throws IOException {
-        String outputFile = "tag_count_report.csv";
+        String outputFile = "output/tag_count_report.csv";
         try (PrintWriter printWriter = new PrintWriter(new FileWriter(outputFile))) {
             printWriter.println("Tag Counts:");
             printWriter.println("Tag,Count");
@@ -82,7 +82,7 @@ public class FlowLogProcessror {
     }
 
     public void generatePortProtocolCombinationCountOutputReport() throws IOException {
-        String outputFile = "port_protocol_com_count_report.csv";
+        String outputFile = "output/port_protocol_com_count_report.csv";
         try (PrintWriter printWriter = new PrintWriter(new FileWriter(outputFile))) {
             printWriter.println("Port/Protocol Combination Counts: ");
             printWriter.println("Port,Protocol,Count");
