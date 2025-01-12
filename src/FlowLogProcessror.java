@@ -12,6 +12,8 @@ public class FlowLogProcessror {
     private Map<PortProtocolPair, String> _portProtocolTags = new HashMap<>();
     private Map<String, Integer> _tagOfPortProtocolCount = new HashMap<>();
 
+    private  Map<PortProtocolPair, Integer> _portProtocolTagsCount = new HashMap<>();
+
     public void initialPortProtocolTagsMap(String lookupTableFile) throws IOException{
         try (BufferedReader bufferedReader = Files.newBufferedReader(Paths.get(lookupTableFile))) {
             String line = null;
@@ -50,6 +52,7 @@ public class FlowLogProcessror {
                 String tag = null;
 
                 PortProtocolPair curPortProtocolPair = new PortProtocolPair(dstPort, protocol);
+                //take care of "Count of matches for each tag, sample o/p"
                 if(_portProtocolTags.containsKey(curPortProtocolPair)){
                     //get the tag based on the desPort and protocol
                     tag = _portProtocolTags.get(curPortProtocolPair);
@@ -59,6 +62,8 @@ public class FlowLogProcessror {
                     _tagOfPortProtocolCount.put("Untagged", _tagOfPortProtocolCount.getOrDefault("Untagged", 0) + 1);
                 }
 
+                //take care of "Count of matches for each port/protocol combination"
+                _portProtocolTagsCount.put(curPortProtocolPair, _portProtocolTagsCount.getOrDefault(curPortProtocolPair, 0) + 1);
             }
         }
     }
