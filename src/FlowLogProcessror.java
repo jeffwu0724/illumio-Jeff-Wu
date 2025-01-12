@@ -1,0 +1,64 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
+
+public class FlowLogProcessror {
+    // use _portProtocolTags to keep track of
+    // dstport,   protocol,   tag
+    // 25,        tcp,        sv_P1
+    private Map<PortProtocolPair, String> _portProtocolTags = new HashMap<>();
+    private Map<String, Integer> _tagOfPortProtocolCount = new HashMap<>();
+
+    public void initialPortProtocolTagsMap(String lookupTableFile) throws IOException{
+        try (BufferedReader bufferedReader = Files.newBufferedReader(Paths.get(lookupTableFile))) {
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] lookupTableLine = line.split(",");
+                // if the lookupTableFile format is wrong, we will skip
+                if (lookupTableLine.length < 3) continue;
+
+                String dstPort = lookupTableLine[0];
+                String protocol = lookupTableLine[1];
+                String tag = lookupTableLine[2];
+
+                //we will base on the lookpu table, and create a map with PortProtocolPair + tag
+                PortProtocolPair curPortProtocolPair = new PortProtocolPair(dstPort, protocol);
+                _portProtocolTags.put(curPortProtocolPair, tag);
+            }
+        }
+    }
+
+    public void processFlowLogFile(String flowLogFile) throws IOException {
+        // use BufferReader to read in the sample_flow_log.csv, and then we process each line of it
+        // in the given example,
+        // 2 123456789012 eni-0a1b2c3d 10.0.1.201 198.51.100.2 443 49153 6 25 20000 1620140761 1620140821 ACCEPT OK
+        // we will only focus on protocl, which is 6, and the destination port which is 49153, so we will try to transform this into a string array.
+        // and get [6] for port, [7] for protocol
+
+        try (BufferedReader bufferedReader = Files.newBufferedReader(Paths.get(flowLogFile))) {
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] sampleFlowLineArray = line.split("\\s+");
+                // if the flow log format is wrong, we will skip
+                if (sampleFlowLineArray.length < 14) continue;
+
+                String dstPort = sampleFlowLineArray[6];
+                String protocol = sampleFlowLineArray[7];
+                String tag = null;
+
+                PortProtocolPair curPortProtocolPair = new PortProtocolPair(dstPort, protocol);
+                if(_portProtocolTags.containsKey(curPortProtocolPair)){
+                    //get the tag based on the desPort and protocol
+                    tag = _portProtocolTags.get(curPortProtocolPair);
+                    //update the _tagOfPortProtocolCount, if we already have a record, then we use it + 1, else, we initial with 1
+                    _tagOfPortProtocolCount.put(tag, _tagOfPortProtocolCount.getOrDefault(tag, 0) + 1);
+                }
+
+            }
+        }
+    }
+
+}
