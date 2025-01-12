@@ -17,7 +17,7 @@ public class FlowLogProcessror {
 
     public void initialPortProtocolTagsMap(String lookupTableFile) throws IOException{
         try (BufferedReader bufferedReader = Files.newBufferedReader(Paths.get(lookupTableFile))) {
-            String line = null;
+            String line = bufferedReader.readLine();
             while ((line = bufferedReader.readLine()) != null) {
                 String[] lookupTableLine = line.trim().split(",");
                 // if the lookupTableFile format is wrong, we will skip
