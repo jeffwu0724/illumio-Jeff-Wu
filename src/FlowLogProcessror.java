@@ -19,7 +19,7 @@ public class FlowLogProcessror {
         try (BufferedReader bufferedReader = Files.newBufferedReader(Paths.get(lookupTableFile))) {
             String line = null;
             while ((line = bufferedReader.readLine()) != null) {
-                String[] lookupTableLine = line.split(",");
+                String[] lookupTableLine = line.trim().split(",");
                 // if the lookupTableFile format is wrong, we will skip
                 if (lookupTableLine.length < 3) continue;
 
@@ -44,7 +44,7 @@ public class FlowLogProcessror {
         try (BufferedReader bufferedReader = Files.newBufferedReader(Paths.get(flowLogFile))) {
             String line = null;
             while ((line = bufferedReader.readLine()) != null) {
-                String[] sampleFlowLineArray = line.split("\\s+");
+                String[] sampleFlowLineArray = line.trim().split("\\s+");
                 // if the flow log format is wrong, we will skip
                 if (sampleFlowLineArray.length < 14) continue;
 
