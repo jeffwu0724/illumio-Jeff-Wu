@@ -1,5 +1,7 @@
 import java.io.BufferedReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -11,7 +13,6 @@ public class FlowLogProcessror {
     // 25,        tcp,        sv_P1
     private Map<PortProtocolPair, String> _portProtocolTags = new HashMap<>();
     private Map<String, Integer> _tagOfPortProtocolCount = new HashMap<>();
-
     private  Map<PortProtocolPair, Integer> _portProtocolTagsCount = new HashMap<>();
 
     public void initialPortProtocolTagsMap(String lookupTableFile) throws IOException{
@@ -66,6 +67,31 @@ public class FlowLogProcessror {
                 _portProtocolTagsCount.put(curPortProtocolPair, _portProtocolTagsCount.getOrDefault(curPortProtocolPair, 0) + 1);
             }
         }
+    }
+
+    public void generateTagCountOutputReport() throws IOException {
+        String outputFile = "tag_count_report.csv";
+        try (PrintWriter printWriter = new PrintWriter(new FileWriter(outputFile))) {
+            printWriter.println("Tag Counts:");
+            printWriter.println("Tag,Count");
+
+            for (Map.Entry<String, Integer> entry : _tagOfPortProtocolCount.entrySet()) {
+                printWriter.println(entry.getKey() + "," + entry.getValue());
+            }
+        }
+    }
+
+    public void generatePortProtocolCombinationCountOutputReport() throws IOException {
+        String outputFile = "port_protocol_com_count_report.csv";
+        try (PrintWriter printWriter = new PrintWriter(new FileWriter(outputFile))) {
+            printWriter.println("Port/Protocol Combination Counts: ");
+            printWriter.println("Port,Protocol,Count");
+
+            for (Map.Entry<PortProtocolPair, Integer> entry : _portProtocolTagsCount.entrySet()) {
+                printWriter.println(entry.getKey() + "," + entry.getValue());
+            }
+        }
+      
     }
 
 }
