@@ -9,6 +9,10 @@ public class PortProtocolPair {
         this._protocol = _getProtocolFromNumber(protocolNumber);
     }
 
+    @Override
+    public String toString() {
+        return this._port + "," + this._protocol;
+    }
 
 
     private String _getProtocolFromNumber(String protocolNumber) {
