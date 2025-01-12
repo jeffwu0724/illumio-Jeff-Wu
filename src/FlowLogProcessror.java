@@ -55,6 +55,8 @@ public class FlowLogProcessror {
                     tag = _portProtocolTags.get(curPortProtocolPair);
                     //update the _tagOfPortProtocolCount, if we already have a record, then we use it + 1, else, we initial with 1
                     _tagOfPortProtocolCount.put(tag, _tagOfPortProtocolCount.getOrDefault(tag, 0) + 1);
+                }else{
+                    _tagOfPortProtocolCount.put("Untagged", _tagOfPortProtocolCount.getOrDefault("Untagged", 0) + 1);
                 }
 
             }
