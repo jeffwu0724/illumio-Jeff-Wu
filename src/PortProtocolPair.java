@@ -14,6 +14,9 @@ public class PortProtocolPair {
         return this._port + "," + this._protocol;
     }
 
+    public String getPort() {
+        return _port;
+    }
 
 
 

@@ -109,9 +109,13 @@ public class FlowLogProcessror {
             printWriter.println("Port/Protocol Combination Counts: ");
             printWriter.println("Port,Protocol,Count");
 
-            for (Map.Entry<PortProtocolPair, Integer> entry : _portProtocolTagsCount.entrySet()) {
-                printWriter.println(entry.getKey() + "," + entry.getValue());
-            }
+            _portProtocolTagsCount.entrySet().stream()
+                    .sorted((e1, e2) -> {
+                        int port1 = Integer.parseInt(e1.getKey().getPort());
+                        int port2 = Integer.parseInt(e2.getKey().getPort());
+                        return Integer.compare(port1, port2);
+                    })
+                    .forEach(entry -> printWriter.println(entry.getKey() + "," + entry.getValue()));
         }
       
     }
