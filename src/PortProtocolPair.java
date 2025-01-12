@@ -6,7 +6,7 @@ public class PortProtocolPair {
 
     public PortProtocolPair(String port, String protocolNumber) {
         this._port = port;
-        this._protocol = _getProtocolFromNumber(protocolNumber);
+        this._protocol = protocolNumber;
     }
 
     @Override
@@ -15,17 +15,6 @@ public class PortProtocolPair {
     }
 
 
-    private String _getProtocolFromNumber(String protocolNumber) {
-        switch (protocolNumber) {
-            case "6":
-                return "tcp";
-            case "17":
-                return "udp";
-            case "1":
-                return "icmp";
-            default:
-                return "others";
-        }
-    }
+
 
 }

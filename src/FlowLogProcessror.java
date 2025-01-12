@@ -23,14 +23,21 @@ public class FlowLogProcessror {
                 // if the lookupTableFile format is wrong, we will skip
                 if (lookupTableLine.length < 3) continue;
 
+
+
                 String dstPort = lookupTableLine[0].trim();
+                System.out.print(dstPort + " ");
                 String protocol = lookupTableLine[1].toLowerCase().trim();
+                System.out.println(protocol);
                 String tag = lookupTableLine[2].toLowerCase().trim();
 
                 //we will base on the lookpu table, and create a map with PortProtocolPair + tag
                 PortProtocolPair curPortProtocolPair = new PortProtocolPair(dstPort, protocol);
                 _portProtocolTags.put(curPortProtocolPair, tag);
+
+
             }
+            System.out.println(_portProtocolTags);
         }
     }
 
@@ -52,7 +59,7 @@ public class FlowLogProcessror {
                 String protocol = sampleFlowLineArray[7];
                 String tag = null;
 
-                PortProtocolPair curPortProtocolPair = new PortProtocolPair(dstPort, protocol);
+                PortProtocolPair curPortProtocolPair = new PortProtocolPair(dstPort, _getProtocolFromNumber(protocol));
                 //take care of "Count of matches for each tag, sample o/p"
                 if(_portProtocolTags.containsKey(curPortProtocolPair)){
                     //get the tag based on the desPort and protocol
@@ -65,7 +72,22 @@ public class FlowLogProcessror {
 
                 //take care of "Count of matches for each port/protocol combination"
                 _portProtocolTagsCount.put(curPortProtocolPair, _portProtocolTagsCount.getOrDefault(curPortProtocolPair, 0) + 1);
+
+
             }
+        }
+    }
+
+    private String _getProtocolFromNumber(String protocolNumber) {
+        switch (protocolNumber) {
+            case "6":
+                return "tcp";
+            case "17":
+                return "udp";
+            case "1":
+                return "icmp";
+            default:
+                return "others";
         }
     }
 
